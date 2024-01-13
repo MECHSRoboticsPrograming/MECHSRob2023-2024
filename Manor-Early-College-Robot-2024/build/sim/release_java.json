@@ -1,0 +1,21 @@
+[
+  {
+    "type": "java",
+    "name": "jar (in project Manor-Early-College-Robot-2024-Back Up Tank Drive)",
+    "extensions": [
+      {
+        "name": "Sim GUI",
+        "libName": "/Users/24samuel.bautistazam/Desktop/Manor-Early-College-Robot-2024-Back Up Tank Drive/build/jni/release/libhalsim_gui.dylib",
+        "defaultEnabled": true
+      },
+      {
+        "name": "Use Real DriverStation",
+        "libName": "/Users/24samuel.bautistazam/Desktop/Manor-Early-College-Robot-2024-Back Up Tank Drive/build/jni/release/libhalsim_ds_socket.dylib",
+        "defaultEnabled": false
+      }
+    ],
+    "environment": {},
+    "libraryDir": "/Users/24samuel.bautistazam/Desktop/Manor-Early-College-Robot-2024-Back Up Tank Drive/build/jni/release",
+    "mainClassName": "frc.robot.Main"
+  }
+]
