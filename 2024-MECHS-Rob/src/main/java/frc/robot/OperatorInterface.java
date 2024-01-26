@@ -12,10 +12,10 @@ public class OperatorInterface {
     }
 
     public double leftDriveStick (){
-        return this.Pilot_Joystick.getRawAxis(RobotConstants.Pilot_Drive_Channel_L) * 0.2;
+        return this.Pilot_Joystick.getRawAxis(RobotConstants.Pilot_Drive_Channel_L);
       }
       
       public double rightDriveStick (){
-        return this.Pilot_Joystick.getRawAxis(RobotConstants.Pilot_Drive_Channel_R) * 0.2;
+        return this.Pilot_Joystick.getRawAxis(RobotConstants.Pilot_Drive_Channel_R);
       }
 }

@@ -25,7 +25,6 @@ public class RobotConstants {
     //Subject to change port need to use game tools and xbox controller 
     //
 
-    public static final boolean MOTOR_INVERT_L = true;
-    public static final boolean MOTOR_INVERT_R = false; 
+    
     //Needed for logitech controllers subject to change
 }

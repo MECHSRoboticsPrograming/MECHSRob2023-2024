@@ -14,10 +14,12 @@ public class DriveSystem {
         this.Motor_FLT = new CANSparkMax(RobotConstants.Motor_Channel_FLT, MotorType.kBrushed);
         this.Motor_FRT = new CANSparkMax(RobotConstants.Motor_Channel_FRT, MotorType.kBrushed);
 
-        this.Motor_BLT.setInverted(true);
+        
+
+        this.Motor_BLT.setInverted(false);                                                                                                                                                                                                                                                                                                                                                                                              
         this.Motor_BRT.setInverted(true);
-        this.Motor_FLT.setInverted(true);
-        this.Motor_FRT.setInverted(false);
+        this.Motor_FLT.setInverted(false);
+        this.Motor_FRT.setInverted(true);
     }
 
     public void update(double Lmove, double Rmove){
