@@ -7,6 +7,10 @@ public class RobotConstants {
     public static final int Motor_Channel_BLT = 2;
     public static final int Motor_Channel_FRT = 3;
     public static final int Motor_Channel_BRT = 4;
+    public static final int Motor_Channel_Intake = 5;
+    public static final int Motor_Channel_Shooter = 6;
+
+    
     //These are our constants for our drive system, Motor_Channel is the
     // Indication of which channel said commands will go and activate.
     //B stand for back, F stands for front, L stands for left, R stands 
@@ -24,7 +28,10 @@ public class RobotConstants {
     public static final int Pilot_Drive_Channel_R= 5;
     //Subject to change port need to use game tools and xbox controller 
     //
-
     
+
+   
+    
+
     //Needed for logitech controllers subject to change
 }

@@ -25,6 +25,7 @@ public class Robot extends TimedRobot {
   private final Timer m_timer = new Timer();
   private OperatorInterface _Ops;
   private DriveSystem _driveSystem;
+  private IntakeSystem _intakeSystem;
 
 
   /**
@@ -39,6 +40,7 @@ public class Robot extends TimedRobot {
 
     this._Ops = new OperatorInterface();
     this._driveSystem = new DriveSystem();
+    this._intakeSystem = new IntakeSystem();
   }
 
   /**
@@ -101,6 +103,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     this._driveSystem.update(this._Ops.leftDriveStick(), this._Ops.rightDriveStick());
+    this._intakeSystem.update(this._Ops.intakeButton(), this._Ops.reverseIntakeButton());
 
   }
 
