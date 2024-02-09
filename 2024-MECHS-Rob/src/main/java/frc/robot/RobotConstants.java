@@ -19,7 +19,7 @@ public class RobotConstants {
 
     //Pilot and CoPilot Ports
     public static final int Controller_Port_Pilot = 0;
-    public static final int Controller_Port_Co_Pilot= 1;
+    
     //Subject to change for inputs might have to do extra code for 
     //Logitech controllers
 

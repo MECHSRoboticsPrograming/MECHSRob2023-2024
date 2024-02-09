@@ -19,11 +19,18 @@ public class OperatorInterface {
       }
     
     public boolean intakeButton(){
-      return this.Pilot_Joystick.getBButtonPressed();
+      return this.Pilot_Joystick.getRightBumperPressed();
     }
 
     public boolean reverseIntakeButton(){
-      return this.Pilot_Joystick.getXButtonPressed();
+      return this.Pilot_Joystick.getLeftBumperPressed();
+    } 
+    public double ampShooterTrigger(){
+      return this.Pilot_Joystick.getLeftTriggerAxis();
+    }
+    
+    public double speakerShooterTrigger(){
+      return this.Pilot_Joystick.getRightTriggerAxis();
     }
 
     
