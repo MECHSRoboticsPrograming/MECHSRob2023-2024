@@ -33,5 +33,9 @@ public class OperatorInterface {
       return this.Pilot_Joystick.getRightTriggerAxis();
     }
 
+    public boolean reverseShooterButton(){
+      return this.Pilot_Joystick.getYButtonPressed();
+    }
+
     
 }

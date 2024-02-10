@@ -26,6 +26,7 @@ public class Robot extends TimedRobot {
   private OperatorInterface _Ops;
   private DriveSystem _driveSystem;
   private IntakeSystem _intakeSystem;
+  private ShooterSystem _shooterSystem;
 
 
   /**
@@ -41,6 +42,8 @@ public class Robot extends TimedRobot {
     this._Ops = new OperatorInterface();
     this._driveSystem = new DriveSystem();
     this._intakeSystem = new IntakeSystem();
+    this._shooterSystem = new ShooterSystem();
+    
   }
 
   /**
@@ -104,6 +107,8 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     this._driveSystem.update(this._Ops.leftDriveStick(), this._Ops.rightDriveStick());
     this._intakeSystem.update(this._Ops.intakeButton(), this._Ops.reverseIntakeButton());
+    this._shooterSystem.update(this._Ops.speakerShooterTrigger(), this._Ops.ampShooterTrigger(), this._Ops.reverseShooterButton());
+    
 
   }
 
