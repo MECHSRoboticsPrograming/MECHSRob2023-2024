@@ -7,8 +7,9 @@ public class RobotConstants {
     public static final int Motor_Channel_BLT = 2;
     public static final int Motor_Channel_FRT = 3;
     public static final int Motor_Channel_BRT = 4;
-    public static final int Motor_Channel_Intake = 5;
-    public static final int Motor_Channel_Shooter = 6;
+    public static final int Motor_Channel_Shooter_1 = 5;
+    public static final int Motor_Channel_Shooter_2 = 6;
+    public static final int Motor_Channel_Intake = 7;
 
     
     //These are our constants for our drive system, Motor_Channel is the

@@ -34,6 +34,9 @@ public class OperatorInterface {
     }
 
     public boolean reverseShooterButton(){
+      boolean testVar = this.Pilot_Joystick.getYButtonPressed();
+      System.out.println(testVar);
+  
       return this.Pilot_Joystick.getYButtonPressed();
     }
 
