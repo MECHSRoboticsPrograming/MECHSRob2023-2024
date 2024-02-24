@@ -19,11 +19,11 @@ public class OperatorInterface {
       }
     
     public boolean intakeButton(){
-      return this.Pilot_Joystick.getRightBumperPressed();
+      return this.Pilot_Joystick.getRightBumper();
     }
 
     public boolean reverseIntakeButton(){
-      return this.Pilot_Joystick.getLeftBumperPressed();
+      return this.Pilot_Joystick.getLeftBumper();
     } 
     public double ampShooterTrigger(){
       return this.Pilot_Joystick.getLeftTriggerAxis();
@@ -34,9 +34,6 @@ public class OperatorInterface {
     }
 
     public boolean reverseShooterButton(){
-      boolean testVar = this.Pilot_Joystick.getYButtonPressed();
-      System.out.println(testVar);
-  
       return this.Pilot_Joystick.getYButtonPressed();
     }
 

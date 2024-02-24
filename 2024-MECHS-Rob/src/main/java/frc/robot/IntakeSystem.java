@@ -8,15 +8,14 @@ public class IntakeSystem {
     public IntakeSystem() {
         
         this.Motor_Intake = new VictorSPX(RobotConstants.Motor_Channel_Intake);
+        this.Motor_Intake.setInverted(true);
     }
 
     public void update(boolean Intake_Status, boolean reverseIntakeButton) {
         if (Intake_Status == true) {
-            this.Motor_Intake.setInverted(false);
             this.Motor_Intake.set(VictorSPXControlMode.PercentOutput, 0.5);
        } else if (reverseIntakeButton == true) {
-            this.Motor_Intake.setInverted(true);
-            this.Motor_Intake.set(VictorSPXControlMode.PercentOutput, 0.5);
+            this.Motor_Intake.set(VictorSPXControlMode.PercentOutput, -0.5);
         } else {
             this.Motor_Intake.set(VictorSPXControlMode.PercentOutput, 0.0);
         }
