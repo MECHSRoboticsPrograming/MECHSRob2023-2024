@@ -32,6 +32,11 @@ public class DriveSystem {
         this.Motor_BLT.set(Rmove);
         this.Motor_FRT.set(Lmove);
         this.Motor_BRT.set(Lmove);
+                
+        this.Motor_BLT.setInverted(true);                                                                                                                                                                                                                                                                                                                                                                                              
+        this.Motor_BRT.setInverted(false);
+        this.Motor_FLT.setInverted(true);
+        this.Motor_FRT.setInverted(false);
 
         /*this.Motor_FLT.set(Lmove);
         this.Motor_BLT.set(Lmove);
