@@ -10,8 +10,7 @@ public class ShooterSystem {
         this.Shooter_Motor2 = new CANSparkMax(RobotConstants.Motor_Channel_Shooter_2, MotorType.kBrushed);
     }
     public void update(double speakerShooterTrigger, double ampShooterTrigger, boolean reverseShooterButton){
-        System.out.println("Shooter trigger value " + speakerShooterTrigger);
-        System.out.println("Soft shooter trigger value " + ampShooterTrigger);
+       
         if (speakerShooterTrigger > 0.5){
             this.Shooter_Motor1.setInverted(false);
             this.Shooter_Motor1.set(1.0); 

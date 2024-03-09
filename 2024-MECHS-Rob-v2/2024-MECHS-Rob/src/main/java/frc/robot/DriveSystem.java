@@ -15,18 +15,29 @@ public class DriveSystem {
         this.Motor_FRT = new CANSparkMax(RobotConstants.Motor_Channel_FRT, MotorType.kBrushed);
 
 
-        this.Motor_BLT.setInverted(false);                                                                                                                                                                                                                                                                                                                                                                                              
-        this.Motor_BRT.setInverted(true);
-        this.Motor_FLT.setInverted(false);
-        this.Motor_FRT.setInverted(true);
+        this.Motor_BLT.setInverted(true);                                                                                                                                                                                                                                                                                                                                                                                              
+        this.Motor_BRT.setInverted(false);
+        this.Motor_FLT.setInverted(true);
+        this.Motor_FRT.setInverted(false);
+
+        
+       // this.Motor_BLT.setInverted(false);                                                                                                                                                                                                                                                                                                                                                                                              
+       // this.Motor_BRT.setInverted(true);
+       // this.Motor_FLT.setInverted(false);
+       // this.Motor_FRT.setInverted(true);
     }
 
     public void update(double Lmove, double Rmove){
-        this.Motor_FLT.set(Lmove);
+        this.Motor_FLT.set(Rmove);
+        this.Motor_BLT.set(Rmove);
+        this.Motor_FRT.set(Lmove);
+        this.Motor_BRT.set(Lmove);
+
+        /*this.Motor_FLT.set(Lmove);
         this.Motor_BLT.set(Lmove);
         this.Motor_FRT.set(Rmove);
         this.Motor_BRT.set(Rmove);
-
+*/
     }
 }
 

@@ -80,7 +80,7 @@ public class Robot extends TimedRobot {
     switch (m_autoSelected) {
       case kCustomAuto:
         if (m_timer.get() < 2.0) {
-          this._driveSystem.update(0.2, 0.2);
+          this._driveSystem.update(-0.2, -0.2);
 
         }else{
           this._driveSystem.update(0, 0);
