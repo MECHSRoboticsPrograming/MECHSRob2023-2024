@@ -37,5 +37,11 @@ public class OperatorInterface {
       return this.Pilot_Joystick.getYButton();
     }
 
+    public boolean sequenceInitialization() {
+      return this.Pilot_Joystick.getXButtonPressed();
+    }
     
+    public boolean sequenceCanelButton() {
+      return this.Pilot_Joystick.getBButtonPressed();
+    }
 }

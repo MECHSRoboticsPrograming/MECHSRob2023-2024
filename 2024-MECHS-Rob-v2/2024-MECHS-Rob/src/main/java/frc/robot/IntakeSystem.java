@@ -13,12 +13,20 @@ public class IntakeSystem {
 
     public void update(boolean Intake_Status, boolean reverseIntakeButton) {
         if (Intake_Status == true) {
-            this.Motor_Intake.set(VictorSPXControlMode.PercentOutput, 0.5);
+            this.feedNote();
        } else if (reverseIntakeButton == true) {
-            this.Motor_Intake.set(VictorSPXControlMode.PercentOutput, -0.5);
+            this.reverse();
         } else {
             this.Motor_Intake.set(VictorSPXControlMode.PercentOutput, 0.0);
         }
         // Posible logic issue here could better nest the inverted toggle value
+    }
+
+    public void feedNote() {
+        this.Motor_Intake.set(VictorSPXControlMode.PercentOutput, 0.5);
+    }
+
+    public void reverse() {
+        this.Motor_Intake.set(VictorSPXControlMode.PercentOutput, -0.5);
     }
 }

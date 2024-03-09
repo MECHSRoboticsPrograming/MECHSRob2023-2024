@@ -28,7 +28,6 @@ public class Robot extends TimedRobot {
   private IntakeSystem _intakeSystem;
   private ShooterSystem _shooterSystem;
 
-
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -105,12 +104,61 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    this._driveSystem.update(this._Ops.leftDriveStick(), this._Ops.rightDriveStick());
-    this._intakeSystem.update(this._Ops.intakeButton(), this._Ops.reverseIntakeButton());
-    this._shooterSystem.update(this._Ops.speakerShooterTrigger(), this._Ops.ampShooterTrigger(), this._Ops.reverseShooterButton());
-    
-
+    if (RobotConstants.inTeleopMacroMode == false) {
+      System.out.println("In manual mode");
+      if (this._Ops.sequenceInitialization()) {
+        RobotConstants.inTeleopMacroMode = true;
+        m_timer.restart();
+      }
+      else {
+        this._driveSystem.update(this._Ops.leftDriveStick(), this._Ops.rightDriveStick());
+        this._intakeSystem.update(this._Ops.intakeButton(), this._Ops.reverseIntakeButton());
+        this._shooterSystem.update(this._Ops.speakerShooterTrigger(), this._Ops.ampShooterTrigger(), this._Ops.reverseShooterButton());
+      }
+    }
+    else if (RobotConstants.inTeleopMacroMode == true){
+      System.out.println("In sequence");
+      if (this._Ops.sequenceCanelButton()) {
+        RobotConstants.inTeleopMacroMode = false;
+      }
+      else {
+        // run the sequence
+        this.shootingSequence();
+      }
+    }
   }
+
+  public void shootingSequence() {
+    double initialBackupDuration = 1.0;
+    double noteSeparationDuration = 0.35;
+    double shooterWindupDuration = 1.0;
+    double backupDuration = 2.0;
+    if (m_timer.get() < initialBackupDuration) {
+      double initialBackupSpeed = -0.2;
+      this._driveSystem.update(initialBackupSpeed, initialBackupSpeed);
+    }
+    else if (m_timer.get() < initialBackupDuration + noteSeparationDuration) {
+      double noteSeparationSpeed = 0.4;
+      this._intakeSystem.reverse();
+      this._driveSystem.update(noteSeparationSpeed, noteSeparationSpeed);
+     
+    }
+    else if (m_timer.get() < shooterWindupDuration + initialBackupDuration + noteSeparationDuration){
+      this._driveSystem.update(0.0, 0.0);
+      this._shooterSystem.shoot();
+    }
+    else if (m_timer.get() < shooterWindupDuration + backupDuration + initialBackupDuration + noteSeparationDuration) {
+        // speed goes from -1 to 1
+        // back up and spin intake at the same time.
+        double backup_speed = -0.1;
+        this._driveSystem.update(backup_speed, backup_speed);
+        this._intakeSystem.feedNote();
+    }
+    else {
+      RobotConstants.inTeleopMacroMode = false;
+    }
+  }
+  
 
   /** This function is called once when the robot is disabled. */
   @Override

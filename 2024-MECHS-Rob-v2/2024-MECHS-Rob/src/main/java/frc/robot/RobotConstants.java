@@ -30,9 +30,6 @@ public class RobotConstants {
     //Subject to change port need to use game tools and xbox controller 
     //
     
-
-   
-    
-
+    public static boolean inTeleopMacroMode = false;
     //Needed for logitech controllers subject to change
 }
