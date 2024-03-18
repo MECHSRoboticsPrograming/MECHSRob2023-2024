@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -44,6 +45,7 @@ public class Robot extends TimedRobot {
     this._driveSystem = new DriveSystem();
     this._intakeSystem = new IntakeSystem();
     this._shooterSystem = new ShooterSystem();
+    CameraServer.startAutomaticCapture();
     
   }
 
