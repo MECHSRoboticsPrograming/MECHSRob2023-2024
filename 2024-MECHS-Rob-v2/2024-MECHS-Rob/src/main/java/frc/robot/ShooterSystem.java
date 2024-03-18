@@ -15,9 +15,9 @@ public class ShooterSystem {
             this.shoot();
         } else if( ampShooterTrigger > 0.5){
             this.Shooter_Motor1.setInverted(false);
-            this.Shooter_Motor1.set(0.55);
+            this.Shooter_Motor1.set(0.5);
             this.Shooter_Motor2.setInverted(true);
-            this.Shooter_Motor2.set(0.55);
+            this.Shooter_Motor2.set(0.5);
         } else if (reverseShooterButton == true){
             this.Shooter_Motor1.setInverted(true);
             this.Shooter_Motor1.set(0.5);

@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 
@@ -78,11 +80,20 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     switch (m_autoSelected) {
       case kCustomAuto:
-        if (m_timer.get() < 2.0) {
-          this._driveSystem.update(-0.4, -0.4);
-
+        if (m_timer.get() < 4.0) {
+          shootingSequence(0.0);
+          
+        }else if (m_timer.get() < 5.0){
+          this._driveSystem.update(0, 0);
+          this._intakeSystem.update(false, false);
+          this._shooterSystem.update( 0.0, 0.0, false);
+          
+        }else if(m_timer.get() < 8.0){
+          shootingSequence(5.0);
         }else{
           this._driveSystem.update(0, 0);
+          this._intakeSystem.update(false, false);
+          this._shooterSystem.update( 0.0, 0.0, false);
         }
         break;
       case kDefaultAuto:
@@ -123,34 +134,35 @@ public class Robot extends TimedRobot {
       }
       else {
         // run the sequence
-        this.shootingSequence();
+        this.shootingSequence(0.0);
       }
     }
   }
 
-  public void shootingSequence() {
+  public void shootingSequence(double shooter_Offset_Time_Diffrence) {
+    double shooter_Timer = m_timer.get() - shooter_Offset_Time_Diffrence;
     double initialBackupDuration = 1.0;
     double noteSeparationDuration = 0.35;
     double shooterWindupDuration = 1.0;
     double backupDuration = 2.0;
-    if (m_timer.get() < initialBackupDuration) {
+    if (shooter_Timer < initialBackupDuration) {
       double initialBackupSpeed = -0.2;
       this._driveSystem.update(initialBackupSpeed, initialBackupSpeed);
     }
-    else if (m_timer.get() < initialBackupDuration + noteSeparationDuration) {
-      double noteSeparationSpeed = 0.4;
+    else if (shooter_Timer < initialBackupDuration + noteSeparationDuration) {
+      double noteSeparationSpeed = 0.35;
       this._intakeSystem.reverse();
       this._driveSystem.update(noteSeparationSpeed, noteSeparationSpeed);
      
     }
-    else if (m_timer.get() < shooterWindupDuration + initialBackupDuration + noteSeparationDuration){
+    else if (shooter_Timer < shooterWindupDuration + initialBackupDuration + noteSeparationDuration){
       this._driveSystem.update(0.0, 0.0);
       this._shooterSystem.shoot();
     }
-    else if (m_timer.get() < shooterWindupDuration + backupDuration + initialBackupDuration + noteSeparationDuration) {
+    else if (shooter_Timer < shooterWindupDuration + backupDuration + initialBackupDuration + noteSeparationDuration) {
         // speed goes from -1 to 1
         // back up and spin intake at the same time.
-        double backup_speed = -0.1;
+        double backup_speed = -0.15;
         this._driveSystem.update(backup_speed, backup_speed);
         this._intakeSystem.feedNote();
     }
