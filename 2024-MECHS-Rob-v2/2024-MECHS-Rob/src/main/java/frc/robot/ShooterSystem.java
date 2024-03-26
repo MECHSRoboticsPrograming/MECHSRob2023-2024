@@ -20,9 +20,9 @@ public class ShooterSystem {
             this.Shooter_Motor2.set(0.5);
         } else if (reverseShooterButton == true){
             this.Shooter_Motor1.setInverted(true);
-            this.Shooter_Motor1.set(0.5);
+            this.Shooter_Motor1.set(0.75);
             this.Shooter_Motor2.setInverted(false);
-            this.Shooter_Motor2.set(0.5);
+            this.Shooter_Motor2.set(0.75);
         }
         else{
             this.Shooter_Motor1.set(0);

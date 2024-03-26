@@ -46,7 +46,11 @@ public class Robot extends TimedRobot {
     this._intakeSystem = new IntakeSystem();
     this._shooterSystem = new ShooterSystem();
     CameraServer.startAutomaticCapture();
-    
+  
+
+    SmartDashboard.putNumber("DB/noteSeparationSpeed", 0.3);
+    SmartDashboard.putNumber("DB/initialBackupSpeed", -0.23);
+    SmartDashboard.putNumber("DB/backup_speed", -0.2);
   }
 
   /**
@@ -82,17 +86,25 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     switch (m_autoSelected) {
       case kCustomAuto:
-        if (m_timer.get() < 4.0) {
+        if (m_timer.get() < 5.5) {
           shootingSequence(0.0);
           
-        }else if (m_timer.get() < 5.0){
+        }else if (m_timer.get() < 6.5){
           this._driveSystem.update(0, 0);
           this._intakeSystem.update(false, false);
           this._shooterSystem.update( 0.0, 0.0, false);
-          
-        }else if(m_timer.get() < 8.0){
-          shootingSequence(5.0);
-        }else{
+        }
+        else if (m_timer.get() < 8.0){
+          this._driveSystem.update(-0.4, -0.4);
+          this._intakeSystem.update(true, false);
+        }
+        // else if (m_timer.get() < 9.5){
+        //   this._driveSystem.update(0.4, 0.4);
+
+        // }
+        // else if(m_timer.get() < 13.5){
+        //   shootingSequence(9.5);}
+        else{
           this._driveSystem.update(0, 0);
           this._intakeSystem.update(false, false);
           this._shooterSystem.update( 0.0, 0.0, false);
@@ -135,7 +147,7 @@ public class Robot extends TimedRobot {
         RobotConstants.inTeleopMacroMode = false;
       }
       else {
-        // run the sequence
+        // run the sequence   
         this.shootingSequence(0.0);
       }
     }
@@ -143,17 +155,22 @@ public class Robot extends TimedRobot {
 
   public void shootingSequence(double shooter_Offset_Time_Diffrence) {
     double shooter_Timer = m_timer.get() - shooter_Offset_Time_Diffrence;
-    double initialBackupDuration = 1.0;
-    double noteSeparationDuration = 0.35;
+    double initialBackupDuration = 0.7;
+    
+    double noteSeparationDuration = 0.6;
     double shooterWindupDuration = 1.0;
     double backupDuration = 2.0;
     if (shooter_Timer < initialBackupDuration) {
-      double initialBackupSpeed = -0.2;
+      //double initialBackupSpeed = -0.25;
+      double initialBackupSpeed =  SmartDashboard.getNumber("DB/initialBackupSpeed", -0.23);
       this._driveSystem.update(initialBackupSpeed, initialBackupSpeed);
+      this._shooterSystem.update(0.0, 0.0, false);
     }
     else if (shooter_Timer < initialBackupDuration + noteSeparationDuration) {
-      double noteSeparationSpeed = 0.35;
+      //double noteSeparationSpeed = 0.35;
+      double noteSeparationSpeed =  SmartDashboard.getNumber("DB/noteSeparationSpeed", 0.3);
       this._intakeSystem.reverse();
+      this._shooterSystem.update(0.0, 0.0, true);
       this._driveSystem.update(noteSeparationSpeed, noteSeparationSpeed);
      
     }
@@ -164,7 +181,7 @@ public class Robot extends TimedRobot {
     else if (shooter_Timer < shooterWindupDuration + backupDuration + initialBackupDuration + noteSeparationDuration) {
         // speed goes from -1 to 1
         // back up and spin intake at the same time.
-        double backup_speed = -0.15;
+        double backup_speed = SmartDashboard.getNumber("DB/backup_speed", -0.2);
         this._driveSystem.update(backup_speed, backup_speed);
         this._intakeSystem.feedNote();
     }
