@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
+import frc.robot.Statemachine;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -30,6 +30,80 @@ public class Robot extends TimedRobot {
   private DriveSystem _driveSystem;
   private IntakeSystem _intakeSystem;
   private ShooterSystem _shooterSystem;
+
+
+  public State currentState;
+  public State previousState;
+  public enum State{
+    MANUAL,
+    INTBACKUP,
+    NOTESEPARATION,
+    SHOOTERWINDUP,
+    SHOOTNOTE;
+
+}
+  public void execute_Manual(){
+    this._driveSystem.update(this._Ops.leftDriveStick(), this._Ops.rightDriveStick());
+    this._intakeSystem.update(this._Ops.intakeButton(), this._Ops.reverseIntakeButton());
+    this._shooterSystem.update(this._Ops.speakerShooterTrigger(), this._Ops.ampShooterTrigger(), this._Ops.reverseShooterButton());
+    m_timer.reset();
+    if (this._Ops.sequenceInitialization()){
+      currentState = State.INTBACKUP;
+    }
+  }
+
+  public void execute_Intbackup(){
+    if (this.previousState != State.INTBACKUP) {
+       m_timer.reset();
+       //first point of state
+    }
+
+    double initialBackupSpeed =  SmartDashboard.getNumber("DB/initialBackupSpeed", -0.23);
+    this._driveSystem.update(initialBackupSpeed, initialBackupSpeed);
+    this._shooterSystem.update(0.0, 0.0, false);
+    this._intakeSystem.update(false, false);
+
+    if (m_timer.get() > 0.7 ){
+      currentState = State.NOTESEPARATION;
+      //last point of state 
+    }
+  }
+  public void execute_Noteseparation(){
+    if (this.previousState != State.NOTESEPARATION){
+      m_timer.reset();
+    }
+    double noteSeparationSpeed =  SmartDashboard.getNumber("DB/noteSeparationSpeed", 0.3);
+      this._intakeSystem.reverse();
+      this._shooterSystem.update(0.0, 0.0, true);
+      this._driveSystem.update(noteSeparationSpeed, noteSeparationSpeed); 
+      if (m_timer.get() > 0.6){
+        currentState = State.SHOOTERWINDUP;
+      }
+  }
+  public void execute_Shooterwindup(){
+    if (this.previousState != State.SHOOTERWINDUP){
+      m_timer.reset();
+    }
+    this._driveSystem.update(0.0, 0.0);
+    this._shooterSystem.shoot();
+    this._intakeSystem.update(false, false);
+
+    if(m_timer.get() > 1.0){
+      currentState = State.SHOOTNOTE;
+    }
+
+  }
+  public void execute_Shootnote(){
+    if (this.previousState != State.SHOOTNOTE){
+      m_timer.reset();
+    };
+    double backup_speed = SmartDashboard.getNumber("DB/backup_speed", -0.2);
+    this._driveSystem.update(backup_speed, backup_speed);
+    this._intakeSystem.feedNote();
+    if(m_timer.get() > 2.0){
+      currentState = State.MANUAL;
+    }
+  }
 
   /**
    * This function is run when the robot is first started up and should be used for any
