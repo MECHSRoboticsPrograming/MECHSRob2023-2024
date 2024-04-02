@@ -7,11 +7,11 @@ public class RobotConstants {
     public static final int Motor_Channel_BLT = 4;
     public static final int Motor_Channel_FRT = 1;
     public static final int Motor_Channel_BRT = 2;
-    public static final int Motor_Channel_Shooter_1 = 5;
-    public static final int Motor_Channel_Shooter_2 = 6;
-    public static final int Motor_Channel_Intake = 7;
-
-    
+    public static final int Motor_Channel_Intake = 5;
+    public static final int Motor_Channel_Intake2 = 6;
+    public static final int Motor_Channel_Shooter_1 = 7;
+    public static final int Motor_Channel_Shooter_2 = 8;
+        
     //These are our constants for our drive system, Motor_Channel is the
     // Indication of which channel said commands will go and activate.
     //B stand for back, F stands for front, L stands for left, R stands 
@@ -26,7 +26,7 @@ public class RobotConstants {
 
     //Pilot Joystick Channels
     public static final int Pilot_Drive_Channel_L= 1;
-    public static final int Pilot_Drive_Channel_R= 5;
+    public static final int Pilot_Drive_Channel_R= 4;
     //Subject to change port need to use game tools and xbox controller 
     //
     

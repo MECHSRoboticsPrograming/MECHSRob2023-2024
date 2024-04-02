@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 
@@ -45,6 +46,7 @@ public class Robot extends TimedRobot {
     this._shooterSystem = new ShooterSystem();
     
   }
+
 
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
@@ -93,7 +95,18 @@ public class Robot extends TimedRobot {
     }
   }
 
- 
+  public float D_L(float left, float right) {
+    float rawVal = left + right;
+    float clampedVal = MathUtil.Clamp(rawVal, -1.0, 1.0);
+    return clampedVal;  
+  }
+
+  public float D_R(float left, float right) {
+    float rawVal = left - right;
+    float clampedVal = MathUtil.Clamp(rawVal, -1.0, 1.0);
+    return clampedVal; 
+
+  }
 
 
   /** This function is called once when teleop is enabled. */
@@ -105,11 +118,14 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    this._driveSystem.update(this._Ops.leftDriveStick(), this._Ops.rightDriveStick());
+
+    float lMove = D_L(this._Ops.leftDriveStick(), this._Ops.rightDriveStick());
+    float rMove = D_R(this._Ops.leftDriveStick(), this._Ops.rightDriveStick());
+    this._driveSystem.update(lMove, rMove);
+
+
     this._intakeSystem.update(this._Ops.intakeButton(), this._Ops.reverseIntakeButton());
     this._shooterSystem.update(this._Ops.speakerShooterTrigger(), this._Ops.ampShooterTrigger(), this._Ops.reverseShooterButton());
-    
-
   }
 
   /** This function is called once when the robot is disabled. */

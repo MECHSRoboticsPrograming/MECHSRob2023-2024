@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import edu.wpi.first.math.MathUtil;
 
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 
@@ -10,6 +11,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -116,7 +118,18 @@ public class Robot extends TimedRobot {
         break;
     }
   }
+ public double D_L(double left, double right) {
+    double rawVal = left - right;
+    double clampedVal = MathUtil.clamp(rawVal, -1.0, 1.0);
+    return clampedVal;  
+  }
 
+  public double D_R(double left, double right) {
+    double rawVal = left + right;
+    double clampedVal = MathUtil.clamp(rawVal, -1.0, 1.0);
+    return clampedVal; 
+
+  }
  
 
 
@@ -130,13 +143,15 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     if (RobotConstants.inTeleopMacroMode == false) {
-      System.out.println("In manual mode");
       if (this._Ops.sequenceInitialization()) {
         RobotConstants.inTeleopMacroMode = true;
         m_timer.restart();
       }
       else {
-        this._driveSystem.update(this._Ops.leftDriveStick(), this._Ops.rightDriveStick());
+        double lMove = D_L(this._Ops.leftDriveStick(), this._Ops.rightDriveStick());
+        double rMove = D_R(this._Ops.leftDriveStick(), this._Ops.rightDriveStick());
+        this._driveSystem.update(lMove, rMove);
+
         this._intakeSystem.update(this._Ops.intakeButton(), this._Ops.reverseIntakeButton());
         this._shooterSystem.update(this._Ops.speakerShooterTrigger(), this._Ops.ampShooterTrigger(), this._Ops.reverseShooterButton());
       }
