@@ -15,7 +15,7 @@
     "canbus": null
   },
   "encoder": {
-    "type": "none",
+    "type": "attached",
     "id": 0,
     "canbus": null
   },
@@ -23,5 +23,5 @@
     "drive": false,
     "angle": false
   },
-  "absoluteEncoderInverted": false
+  "absoluteEncoderInverted": true
 }

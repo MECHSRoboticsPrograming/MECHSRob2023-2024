@@ -28,7 +28,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
-    drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity);
+    drivebase.setDefaultCommand(!Robot.isSimulation() ? driveFieldOrientedAngularVelocity : driveFieldOrientedDirectAngleSim);
   }
 
 SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(), 
@@ -46,6 +46,29 @@ SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerv
   Command driveFieldOrientedDirectAngle = drivebase.driveFieldOriented(driveDirectAngle);
   
   Command driveFieldOrientedAngularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
+
+SwerveInputStream driveAngularVelocitySim = SwerveInputStream.of(drivebase.getSwerveDrive(),
+                                                                  () -> -m_driverController.getLeftY(),
+                                                                  () -> -m_driverController.getLeftX())
+                                                                .withControllerRotationAxis(() -> m_driverController.getRawAxis(2))
+                                                                .deadband(OperatorConstants.DEADBAND)
+                                                                .scaleTranslation(0.8)
+                                                                .allianceRelativeControl(true);
+
+SwerveInputStream driveDirectAngleSim = driveAngularVelocitySim.copy()
+                                                                .withControllerHeadingAxis(() -> Math.sin(
+                                                                                                m_driverController.getRawAxis(
+                                                                                                    2) * Math.PI) * (Math.PI * 2),
+                                                                                            () -> Math.cos(
+                                                                                                m_driverController.getRawAxis(
+                                                                                                    2) * Math.PI) *
+                                                                                                  (Math.PI * 2))
+                                                                .headingWhile(true);
+
+Command driveFieldOrientedDirectAngleSim = drivebase.driveFieldOriented(driveDirectAngleSim);
+
+
+
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
