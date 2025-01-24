@@ -50,15 +50,15 @@ public class ElevatorSubsystem extends SubsystemBase {
   public Command moveUp() {
     return startEnd(
       () -> {
-        this.motor0.set(1);;
-        this.motor1.set(-1);;
+        this.motor0.set(1);
+        this.motor1.set(-1);
 
       },
 
       () -> {
 
-        this.motor0.set(0);;
-        this.motor1.set(0);;
+        this.motor0.set(0);
+        this.motor1.set(0);
       }
     );
 
@@ -67,14 +67,14 @@ public class ElevatorSubsystem extends SubsystemBase {
   public Command moveDown() {
     return startEnd(
       ()-> {
-        this.motor0.set(1);;
-        this.motor1.set(-1);;
+        this.motor0.set(-1.0);
+        this.motor1.set(1);
       },
 
       ()-> {
 
-        this.motor0.set(0); ;
-        this.motor1.set(0);;
+        this.motor0.set(0); 
+        this.motor1.set(0);
       }
    );
 
