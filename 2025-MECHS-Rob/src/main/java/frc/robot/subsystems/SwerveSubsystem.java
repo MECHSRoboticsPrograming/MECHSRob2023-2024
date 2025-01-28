@@ -76,6 +76,7 @@ public class SwerveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    //System.out.println("Raw IMU Reading: " + swerveDrive.imuReadingCache.getValue());
   }
 
   @Override
