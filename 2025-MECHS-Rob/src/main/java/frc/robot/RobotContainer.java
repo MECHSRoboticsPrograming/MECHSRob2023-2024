@@ -88,6 +88,6 @@ Command driveFieldOrientedDirectAngleSim = drivebase.driveFieldOriented(driveDir
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return null;
+    return drivebase.getAutonomousCommand("New Auto");
   }
 }
