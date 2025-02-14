@@ -16,10 +16,10 @@ public class CoralEndEffector extends SubsystemBase {
 
     public CoralEndEffector() {
         // Linking motors to CAN IDs
-        wristMotor = new SparkMax(9, MotorType.kBrushless); // Adjust CAN IDs accordingly
-        elbowMotor = new SparkMax(10, MotorType.kBrushless);
-        intakeMotor = new SparkMax(11, MotorType.kBrushless);
-        intakeMotor1 = new SparkMax(12, MotorType.kBrushless);
+        wristMotor = new SparkMax(11, MotorType.kBrushless); // Adjust CAN IDs accordingly
+        elbowMotor = new SparkMax(12, MotorType.kBrushless);
+        intakeMotor = new SparkMax(9, MotorType.kBrushless);
+        intakeMotor1 = new SparkMax(10, MotorType.kBrushless);
     }
 
     // Functionality to rotate wrist

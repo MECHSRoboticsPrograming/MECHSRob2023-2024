@@ -5,11 +5,14 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 import java.io.File;
 import java.util.function.Supplier;
+
+import org.photonvision.PhotonCamera;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -25,6 +28,7 @@ import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
@@ -43,12 +47,14 @@ public class SwerveSubsystem extends SubsystemBase {
 
   File directory = new File(Filesystem.getDeployDirectory(),"swerve");
   SwerveDrive  swerveDrive;
+  PhotonCamera camera;
 
   public SwerveSubsystem() {
         try
 
     {
      SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
+     camera = new PhotonCamera("LogitechCam");
 
       swerveDrive = new SwerveParser(directory).createSwerveDrive(Constants.maxSpeed,
                                                                   new Pose2d(new Translation2d(Meter.of(1),
@@ -189,6 +195,55 @@ public class SwerveSubsystem extends SubsystemBase {
   {
     // Create a path following command using AutoBuilder. This will also trigger event markers.
     return new PathPlannerAuto(pathName);
+  }
+
+  public Command autoTurn() {
+    return Commands.runEnd(
+      () -> {
+// Calculate drivetrain commands from Joystick values
+        
+        // Read in relevant data from the Camera
+        boolean targetVisible = false;
+        double targetYaw = 0.0;
+        var results = camera.getAllUnreadResults();
+        if (!results.isEmpty()) {
+            // Camera processed a new frame since last
+            // Get the last one in the list.
+            var result = results.get(results.size() - 1);
+            if (result.hasTargets()) {
+                // At least one AprilTag was seen by the camera
+                for (var target : result.getTargets()) {
+                    if (target.getFiducialId() == 7) {
+                        // Found Tag 7, record its information
+                        targetYaw = target.getYaw();
+                        targetVisible = true;
+                    }
+                }
+            }
+        }
+
+        // Auto-align when requested
+        double turn = 0.0;
+        if (targetVisible) {
+            // Driver wants auto-alignment to tag 7
+            // And, tag 7 is in sight, so we can turn toward it.
+            // Override the driver's turn command with an automatic one that turns toward the tag.
+            turn = -1.0 * targetYaw * VISION_TURN_kP * Constants.Swerve.kMaxAngularSpeed;
+            System.out.println("Commanded turn rate is " + turn + " and yaw is " + targetYaw);
+        }
+
+        // Command drivetrain motors based on target speeds
+        ChassisSpeeds speeds = new ChassisSpeeds(0, 0, turn);
+        swerveDrive.drive(speeds);
+
+        // Put debug information to the dashboard
+        SmartDashboard.putBoolean("Vision Target Visible", targetVisible);
+      },
+      () -> {
+        ChassisSpeeds resetToZero = new ChassisSpeeds(0, 0, 0);
+        swerveDrive.drive(resetToZero);
+      }
+    );
   }
 
 }
