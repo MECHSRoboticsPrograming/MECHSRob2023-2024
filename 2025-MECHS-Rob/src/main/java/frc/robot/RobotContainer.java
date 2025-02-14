@@ -82,9 +82,9 @@ Command driveFieldOrientedDirectAngleSim = drivebase.driveFieldOriented(driveDir
    * joysticks}.
    */
   private void configureBindings() {
-    m_driverController.a().whileTrue(coralEndEffector.intakeCoral());
-    m_driverController.b().whileTrue(coralEndEffector.ejectCoral());
-    m_driverController.x().whileTrue(coralEndEffector.rotateWristLeft());
+    m_driverController.b().whileTrue(coralEndEffector.intakeCoral());
+    m_driverController.x().whileTrue(coralEndEffector.ejectCoral());
+    m_driverController.a().whileTrue(coralEndEffector.rotateWristLeft());
     m_driverController.y().whileTrue(coralEndEffector.rotateWristRight());
     m_driverController.leftBumper().whileTrue(coralEndEffector.rotateElbowUp());
     m_driverController.rightBumper().whileTrue(coralEndEffector.rotateElbowDown());

@@ -42,15 +42,24 @@ public class CoralEndEffector extends SubsystemBase {
 
     // Functionality for coral intake
     public Command intakeCoral() {
-        return Commands.startEnd(() -> intakeMotor.set(1), () -> intakeMotor.set(0));
-    }
-
-    public Command intakeCoral1() {
-        return Commands.startEnd(() -> intakeMotor1.set(1), () -> intakeMotor1.set(0));
+        return Commands.startEnd(() -> {
+            intakeMotor.set(1);
+            intakeMotor1.set(1);
+        }, () -> {
+            intakeMotor.set(0);
+            intakeMotor1.set(0);
+        });
     }
 
     public Command ejectCoral() {
-        return Commands.startEnd(() -> intakeMotor.set(-1), () -> intakeMotor.set(0));
+        return Commands.startEnd(() -> {
+            intakeMotor.set(-1);
+            intakeMotor1.set(-1);
+        }, () -> {
+            intakeMotor.set(0);
+            intakeMotor1.set(0);
+        });
     }
 }
+
 
