@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CoralEndEffector;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -24,6 +25,7 @@ public class RobotContainer {
   private final CoralEndEffector coralEndEffector = new CoralEndEffector();
   private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
   private final SwerveSubsystem drivebase = new SwerveSubsystem();
+  private final ClimberSubsystem climber = new ClimberSubsystem();
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -96,6 +98,9 @@ Command driveFieldOrientedDirectAngleSim = drivebase.driveFieldOriented(driveDir
     m_driverController.rightTrigger().whileTrue(elevatorSubsystem.moveDown());
     m_driverController.povUp().whileTrue(elevatorSubsystem.elevatorIncrement());
     m_driverController.povDown().whileTrue(elevatorSubsystem.elevatorReturnZero());
+
+    m_driverController.povLeft().whileTrue(climber.deployClimber());
+    m_driverController.povRight().whileTrue(climber.retractClimber());
   }
 
   /**
