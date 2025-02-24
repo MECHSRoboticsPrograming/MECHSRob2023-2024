@@ -35,7 +35,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   
   private double levelNumber = 0; //intializes elevator level
 
-  private double COUNTS_PER_INCH = 95.0; //Number of rotations the motor makes to move the elevaor one inch. 1.76in diameter pitch, 25:1 reduction, cascade, 42 counts per rev
+  private double COUNTS_PER_INCH = 95.0; //Number of counts the hall effect sensor makes when the elevator moves one inch. 1.76in diameter pitch, 25:1 reduction, cascade, 42 counts per rev
   private double GRAVITY_COMPENSATION = 0.1; //Compensates for force of gravity in PID
 
   /** Creates a new ExampleSubsystem. */
