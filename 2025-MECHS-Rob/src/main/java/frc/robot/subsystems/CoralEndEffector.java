@@ -3,8 +3,6 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.Commands;
-
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -12,18 +10,17 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 public class CoralEndEffector extends SubsystemBase {
 
     // Motors for controlling the wrist, elbow, and intake
-    private final SparkMax wristMotor;
+    private SparkMax wristMotor;
     private RelativeEncoder wristEncoder;
 
-    private final SparkMax elbowMotor;
+    private SparkMax elbowMotor;
     private RelativeEncoder elbowEncoder;
 
-    private final SparkMax intakeMotor;
-    private final SparkMax intakeMotorFollower; //Need to set this one to follow the other
+    private SparkMax intakeMotor;
+    private SparkMax intakeMotorFollower; //Need to set this one to follow the other
 
     private double elbowAngle = 0;
     private double wristAngle = 0;
-
 
     private PIDController elbowPid;
     private PIDController wristPid;
@@ -40,29 +37,75 @@ public class CoralEndEffector extends SubsystemBase {
 
         this.elbowEncoder = elbowMotor.getEncoder();
         this.wristEncoder = wristMotor.getEncoder();
+
+        this.elbowPid = new PIDController(0.1, 0, 0);
+        this.wristPid = new PIDController(0.1, 0, 0);
+    }
+
+    public double getElbowAngle() {
+        return elbowEncoder.getPosition() / ELBOW_COUNTS_PER_DEGREE;
+    }
+
+    public double getWristAngle() {
+        return wristEncoder.getPosition() / WRIST_COUNTS_PER_DEGREE;
+    }
+
+    public void setElbowAngle(double targetElbowAngle) {
+        double elbowPidOutput = elbowPid.calculate(getElbowAngle(), targetElbowAngle);
+        double elbowMotorOutput = elbowPidOutput + GRAVITY_COMPENSATION;
+
+        elbowMotorOutput = Math.min(Math.max(elbowMotorOutput, -1.0), 1.0);
+        elbowMotor.set(elbowMotorOutput);
+    }
+
+    public void setWristAngle(double targetWristAngle) {
+        double wristPidOutput = wristPid.calculate(getWristAngle(), targetWristAngle);
+
+        double wristMotorOutput = Math.min(Math.max(wristPidOutput, -1.0), 1.0);
+        wristMotor.set(wristMotorOutput);
+    }
+
+    public Command toggleElbow() {
+        if (elbowAngle == 0) {
+            elbowAngle = 60;
+        }
+        else {
+            elbowAngle = 0;
+        }
+        return runOnce(() -> setElbowAngle(elbowAngle));
+    }
+
+    public Command toggleWrist() {
+        if (wristAngle == 0) {
+            wristAngle = 90;
+        }
+        else {
+            wristAngle = 0;
+        }
+        return runOnce(() -> setWristAngle(wristAngle));
     }
 
     // Functionality to rotate wrist
     public Command rotateWristLeft() {
-        return Commands.startEnd(() -> wristMotor.set(-0.5), () -> wristMotor.set(0));
+        return startEnd(() -> wristMotor.set(-0.5), () -> wristMotor.set(0));
     }
 
     public Command rotateWristRight() {
-        return Commands.startEnd(() -> wristMotor.set(0.5), () -> wristMotor.set(0));
+        return startEnd(() -> wristMotor.set(0.5), () -> wristMotor.set(0));
     }
 
     // Functionality to rotate elbow
     public Command rotateElbowUp() {
-        return Commands.startEnd(() -> elbowMotor.set(0.5), () -> elbowMotor.set(0));
+        return startEnd(() -> elbowMotor.set(0.5), () -> elbowMotor.set(0));
     }
 
     public Command rotateElbowDown() {
-        return Commands.startEnd(() -> elbowMotor.set(-0.5), () -> elbowMotor.set(0));
+        return startEnd(() -> elbowMotor.set(-0.5), () -> elbowMotor.set(0));
     }
 
     // Functionality for coral intake
     public Command intakeCoral() {
-        return Commands.startEnd(() -> {
+        return startEnd(() -> {
             intakeMotor.set(1);
             intakeMotorFollower.set(1);
         }, () -> {
@@ -72,7 +115,7 @@ public class CoralEndEffector extends SubsystemBase {
     }
 
     public Command ejectCoral() {
-        return Commands.startEnd(() -> {
+        return startEnd(() -> {
             intakeMotor.set(-1);
             intakeMotorFollower.set(-1);
         }, () -> {

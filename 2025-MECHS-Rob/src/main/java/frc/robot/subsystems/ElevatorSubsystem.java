@@ -34,6 +34,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private SparkMax motorL;
   
   private double levelNumber = 0; //intializes elevator level
+  private double newHeight = 0;
 
   private double COUNTS_PER_INCH = 95.0; //Number of counts the hall effect sensor makes when the elevator moves one inch. 1.76in diameter pitch, 25:1 reduction, cascade, 42 counts per rev
   private double GRAVITY_COMPENSATION = 0.1; //Compensates for force of gravity in PID
@@ -80,39 +81,32 @@ public class ElevatorSubsystem extends SubsystemBase {
     //Sets motor speed
     motorL.set(motorOutput);
   }
+  
+  public Command elevatorReturnZero() {
+      //Returns the elevator to zero
+      levelNumber = 0;
+      return runOnce(() -> setPosition(0.0));
+  }
 
   public Command elevatorIncrement() {
     //Increments desired elevator level, then sets position
-    return runOnce(
-      () -> {
-        levelNumber += 1;
-        if (levelNumber == 1) {
-          setPosition(20.0);
-        }
-        else if (levelNumber == 2) {
-          setPosition(40.0);
-        }
-        else if (levelNumber == 3) {
-          setPosition(60.0);
-        }
-        else if (levelNumber == 4) {
-          setPosition(70);
-        }
-        else if (levelNumber == 5) {
-          setPosition(0);
-          levelNumber = 0;
-        }
-      });
-  }
-
-  public Command elevatorReturnZero() {
-    //Returns the elevator to zero
-    return runOnce(
-      () -> {
-        setPosition(0.0);
-        levelNumber = 0;
-      }
-    );
+    levelNumber += 1;
+    if (levelNumber == 1) {
+      newHeight = 20.0;
+    }
+    else if (levelNumber == 2) {
+      newHeight = 40.0;
+    }
+    else if (levelNumber == 3) {
+      newHeight = 60.0;
+    }
+    else if (levelNumber == 4) {
+      newHeight = 70.0;
+    }
+    else {
+      elevatorReturnZero();
+    }
+    return runOnce(() -> setPosition(newHeight));
   }
 
   public Command moveUp() {

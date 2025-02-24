@@ -88,12 +88,9 @@ Command driveFieldOrientedDirectAngleSim = drivebase.driveFieldOriented(driveDir
   private void configureBindings() {
     m_driverController.b().whileTrue(coralEndEffector.intakeCoral());
     m_driverController.x().whileTrue(coralEndEffector.ejectCoral());
-    m_driverController.a().whileTrue(coralEndEffector.rotateWristLeft());
-    m_driverController.y().whileTrue(coralEndEffector.rotateWristRight());
-    
-    m_driverController.leftBumper().whileTrue(coralEndEffector.rotateElbowUp());
-    m_driverController.rightBumper().whileTrue(coralEndEffector.rotateElbowDown());
-    
+    m_driverController.a().whileTrue(coralEndEffector.toggleWrist());
+    m_driverController.rightBumper().whileTrue(coralEndEffector.toggleElbow());
+
     m_driverController.leftTrigger().whileTrue(elevatorSubsystem.moveUp());
     m_driverController.rightTrigger().whileTrue(elevatorSubsystem.moveDown());
     m_driverController.povUp().whileTrue(elevatorSubsystem.elevatorIncrement());
