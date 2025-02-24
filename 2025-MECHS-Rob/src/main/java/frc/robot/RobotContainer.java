@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.CoralEndEffector;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import swervelib.SwerveInputStream;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -21,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final CoralEndEffector coralEndEffector = new CoralEndEffector();
+  private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
   private final SwerveSubsystem drivebase = new SwerveSubsystem();
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -86,9 +88,12 @@ Command driveFieldOrientedDirectAngleSim = drivebase.driveFieldOriented(driveDir
     m_driverController.x().whileTrue(coralEndEffector.ejectCoral());
     m_driverController.a().whileTrue(coralEndEffector.rotateWristLeft());
     m_driverController.y().whileTrue(coralEndEffector.rotateWristRight());
+    
     m_driverController.leftBumper().whileTrue(coralEndEffector.rotateElbowUp());
     m_driverController.rightBumper().whileTrue(coralEndEffector.rotateElbowDown());
-
+    
+    m_driverController.leftTrigger().whileTrue(elevatorSubsystem.moveUp());
+    m_driverController.rightTrigger().whileTrue(elevatorSubsystem.moveDown());
   }
 
   /**

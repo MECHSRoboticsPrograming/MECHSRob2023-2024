@@ -13,25 +13,45 @@
 
 package frc.robot.subsystems; 
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import java.util.logging.Level;
+
+import javax.lang.model.util.ElementScanner14;
+
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 
 public class ElevatorSubsystem extends SubsystemBase {
 
-  private SparkMax motor0;
-  private SparkMax motor1;
+  private SparkMax motorR;
+  private RelativeEncoder encoderL;
+  private PIDController pid;
+  private SparkMax motorL;
+  
+  private double levelNumber = 0; //intializes elevator level
+
+  private double COUNTS_PER_INCH = 95.0; //Number of rotations the motor makes to move the elevaor one inch. 1.76in diameter pitch, 25:1 reduction, cascade, 42 counts per rev
+  private double GRAVITY_COMPENSATION = 0.1; //Compensates for force of gravity in PID
 
   /** Creates a new ExampleSubsystem. */
   public ElevatorSubsystem() {
 
-    this.motor0 = new SparkMax(13, MotorType.kBrushless);
-    this.motor1 = new SparkMax(14, MotorType.kBrushless);
+    this.motorR = new SparkMax(13, MotorType.kBrushless);
+    this.motorL = new SparkMax(14, MotorType.kBrushless); //Need to update so that motor 14 follows motor 13
+
+    this.encoderL = motorL.getEncoder();
+    this.pid = new PIDController(0.1, 0, 0); //Need to tune
+
   }
 
-    
+  public double getHeight() {
+    return encoderL.getPosition() / COUNTS_PER_INCH;
+  }
 
   /**
    * Example command factory method.
@@ -47,18 +67,66 @@ public class ElevatorSubsystem extends SubsystemBase {
         });
   }
 
+  public void setPosition(double targetHeight) {
+    //Calculates pid
+    double pidOutput = pid.calculate(getHeight(), targetHeight);
+
+    //Adds gravity compensation
+    double motorOutput = pidOutput + GRAVITY_COMPENSATION;
+
+    //Ensures output is within max speed
+    motorOutput = Math.min(Math.max(motorOutput, -1.0), 1.0);
+
+    //Sets motor speed
+    motorL.set(motorOutput);
+  }
+
+  public Command elevatorIncrement() {
+    //Increments desired elevator level, then sets position
+    return runOnce(
+      () -> {
+        levelNumber += 1;
+        if (levelNumber == 1) {
+          setPosition(20.0);
+        }
+        else if (levelNumber == 2) {
+          setPosition(40.0);
+        }
+        else if (levelNumber == 3) {
+          setPosition(60.0);
+        }
+        else if (levelNumber == 4) {
+          setPosition(70);
+        }
+        else if (levelNumber == 5) {
+          setPosition(0);
+          levelNumber = 0;
+        }
+      });
+  }
+
+  public Command elevatorReturnZero() {
+    //Returns the elevator to zero
+    return runOnce(
+      () -> {
+        setPosition(0.0);
+        levelNumber = 0;
+      }
+    );
+  }
+
   public Command moveUp() {
     return startEnd(
       () -> {
-        this.motor0.set(1);
-        this.motor1.set(-1);
+        this.motorR.set(1);
+        this.motorL.set(-1);
 
       },
 
       () -> {
 
-        this.motor0.set(0);
-        this.motor1.set(0);
+        this.motorR.set(0);
+        this.motorL.set(0);
       }
     );
 
@@ -67,14 +135,14 @@ public class ElevatorSubsystem extends SubsystemBase {
   public Command moveDown() {
     return startEnd(
       ()-> {
-        this.motor0.set(-1.0);
-        this.motor1.set(1);
+        this.motorR.set(-1);
+        this.motorL.set(1);
       },
 
       ()-> {
 
-        this.motor0.set(0); 
-        this.motor1.set(0);
+        this.motorR.set(0); 
+        this.motorL.set(0);
       }
    );
 
