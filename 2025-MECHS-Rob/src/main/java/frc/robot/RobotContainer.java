@@ -94,6 +94,8 @@ Command driveFieldOrientedDirectAngleSim = drivebase.driveFieldOriented(driveDir
     
     m_driverController.leftTrigger().whileTrue(elevatorSubsystem.moveUp());
     m_driverController.rightTrigger().whileTrue(elevatorSubsystem.moveDown());
+    m_driverController.povUp().whileTrue(elevatorSubsystem.elevatorIncrement());
+    m_driverController.povDown().whileTrue(elevatorSubsystem.elevatorReturnZero());
   }
 
   /**
