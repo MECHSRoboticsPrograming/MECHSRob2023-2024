@@ -6,7 +6,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkMaxConfig;
+
 import static frc.robot.Constants.CanIDConstants.*;
 import static frc.robot.Constants.EndEffectorConstants.*;
 
@@ -17,6 +21,7 @@ public class CoralEndEffector extends SubsystemBase {
 
     private SparkMax elbowMotor;
     private RelativeEncoder elbowEncoder;
+    private SparkMaxConfig elbowConfig;
 
     private SparkMax intakeMotor;
     private SparkMax intakeMotorFollower; //Need to set this one to follow the other
@@ -34,6 +39,8 @@ public class CoralEndEffector extends SubsystemBase {
         // Linking motors to CAN IDs
         wristMotor = new SparkMax(wristMotorCan, MotorType.kBrushless);
         elbowMotor = new SparkMax(elbowMotorCan, MotorType.kBrushless);
+        elbowConfig.inverted(true);
+        elbowMotor.configure(elbowConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
         intakeMotor = new SparkMax(intakeMotorCan, MotorType.kBrushless);
         intakeMotorFollower = new SparkMax(intakeMotorFollowerCan, MotorType.kBrushless); 
 
